@@ -1,0 +1,47 @@
+html {
+  word-break: break-word;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 14px;
+
+  .MuiButton-root {
+    font-size: 1rem;
+  }
+
+  .MuiButton-sizeMedium {
+    min-width: 100%;
+  }
+
+  .MuiInputLabel-root {
+    color: #525457;
+  }
+}
+
+@media (min-width: 600px) { // sm
+  html {
+    .MuiButton-sizeMedium {
+      min-width: 20rem;
+    }
+
+    .MuiButton-root {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (min-width: 600px) { // md
+  html {
+    .MuiButton-root {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
