@@ -7,7 +7,7 @@
 	"author": "Pol Thomas",
 	"type": "module",
 	"scripts": {
-		"front-dev": "vite",
+		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
 		"test": "vitest",
