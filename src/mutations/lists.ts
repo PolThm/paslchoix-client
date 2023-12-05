@@ -10,6 +10,11 @@ const postNewList = async (newList: List) => {
   return response.data;
 };
 
-export const useCreateList = () => {
-  return useMutation(postNewList);
+const deleteList = async (listId: string) => {
+  const response = await axios.delete(`${apiUrl}/api/delete-list/${listId}`);
+  return response.data;
 };
+
+export const useCreateList = () => useMutation(postNewList);
+
+export const useDeleteList = () => useMutation(deleteList);

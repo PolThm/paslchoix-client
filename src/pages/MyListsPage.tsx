@@ -1,12 +1,17 @@
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
   CircularProgress,
   Container,
+  IconButton,
   Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ConfirmModal from '@/components/shared/ConfirmModal';
+import { useDeleteList } from '@/mutations/lists';
 import { useQueryGetLists } from '@/queries/lists';
 import { Paths } from '@/types/enums';
 import { List } from '@/types/interfaces';
@@ -14,11 +19,41 @@ import { List } from '@/types/interfaces';
 const MyListsPage = () => {
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQueryGetLists();
+  const {
+    mutate: deleteListMutation,
+    isLoading: isDeleteListLoading,
+    isError: isDeleteListError,
+  } = useDeleteList();
+  const {
+    data,
+    isLoading: areMyListsLoading,
+    isError: areMyListsError,
+  } = useQueryGetLists();
   const myLists: List[] = data ?? [];
+
+  const isLoading = areMyListsLoading || isDeleteListLoading;
+  const isError = areMyListsError || isDeleteListError;
+
+  const [currentList, setCurrentList] = useState<List | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const goToList = (list: List) => {
     navigate(`${Paths.ExistingList}/${list.id}`, { state: { list } });
+  };
+
+  const openConfirmDeleteModal = (list: List) => {
+    setCurrentList(list);
+    setIsConfirmModalOpen(true);
+  };
+
+  const deleteList = () => {
+    if (!currentList) return;
+    deleteListMutation(currentList.id, {
+      onSuccess: () => {
+        setIsConfirmModalOpen(false);
+        setCurrentList(null);
+      },
+    });
   };
 
   return (
@@ -54,13 +89,25 @@ const MyListsPage = () => {
           {!isLoading && !isError && (
             <>
               {myLists.map((list) => (
-                <Button
+                <Box
                   key={list.id}
-                  variant="outlined"
-                  onClick={() => goToList(list)}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: { xs: '90%', sm: 400 },
+                    gap: 2,
+                  }}
                 >
-                  {list.name}
-                </Button>
+                  <Button variant="outlined" onClick={() => goToList(list)}>
+                    {list.name}
+                  </Button>
+                  <IconButton
+                    onClick={() => openConfirmDeleteModal(list)}
+                    color="primary"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
               ))}
               {myLists.length === 0 && (
                 <Typography variant="body1">
@@ -71,6 +118,13 @@ const MyListsPage = () => {
           )}
         </Box>
       </>
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        handleClose={() => setIsConfirmModalOpen(false)}
+        confirmAction={deleteList}
+      >
+        {`Êtes-vous sûr de vouloir supprimer la liste "${currentList?.name}" ?`}
+      </ConfirmModal>
     </Container>
   );
 };

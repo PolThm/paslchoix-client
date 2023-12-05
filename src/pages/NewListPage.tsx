@@ -31,17 +31,24 @@ const NewListPage: FC = () => {
 
   const addChoice = () => {
     if (!newVolunteerTitle) return;
-    setVolunteers([...volunteers, { id: Date.now(), name: newVolunteerTitle }]);
+    setVolunteers([
+      ...volunteers,
+      { id: Date.now().toString(), name: newVolunteerTitle },
+    ]);
     setNewVolunteerTitle('');
   };
 
-  const deleteChoice = (id: number) => {
+  const deleteChoice = (id: string) => {
     setVolunteers(volunteers.filter((volunteer) => volunteer.id !== id));
   };
 
   const createList = () => {
     if (!listName || volunteers.length === 0) return;
-    const list: ListType = { id: Date.now(), name: listName, volunteers };
+    const list: ListType = {
+      id: Date.now().toString(),
+      name: listName,
+      volunteers,
+    };
     createListMutation(list, {
       onSuccess: () => navigate(Paths.MyLists),
     });
