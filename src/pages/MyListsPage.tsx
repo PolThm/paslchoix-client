@@ -28,6 +28,7 @@ const MyListsPage = () => {
     data,
     isLoading: areMyListsLoading,
     isError: areMyListsError,
+    refetch,
   } = useQueryGetLists();
   const myLists: List[] = data ?? [];
 
@@ -35,7 +36,7 @@ const MyListsPage = () => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const goToList = (list: List) => {
-    navigate(`${Paths.ExistingList}/${list.id}`, { state: { list } });
+    navigate(`${Paths.ExistingList}/${list['_id']}`, { state: { list } });
   };
 
   const openConfirmDeleteModal = (list: List) => {
@@ -44,11 +45,12 @@ const MyListsPage = () => {
   };
 
   const deleteList = () => {
-    if (!currentList) return;
-    deleteListMutation(currentList.id, {
+    if (!currentList?.['_id']) return;
+    deleteListMutation(currentList['_id'], {
       onSuccess: () => {
         setIsConfirmModalOpen(false);
         setCurrentList(null);
+        refetch();
       },
     });
   };
@@ -87,12 +89,12 @@ const MyListsPage = () => {
             <>
               {myLists.map((list) => (
                 <Box
-                  key={list.id}
+                  key={list['_id']}
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
                     width: { xs: '90%', sm: 400 },
-                    gap: 2,
+                    gap: 1,
                   }}
                 >
                   <Button variant="outlined" onClick={() => goToList(list)}>

@@ -8,7 +8,6 @@ export interface Route {
 }
 
 export interface Volunteer {
-  _id?: string;
   id: string;
   name: string;
   target?: string;
@@ -16,7 +15,6 @@ export interface Volunteer {
 
 export interface List {
   _id?: string;
-  id: string;
   name: string;
   volunteers: Volunteer[];
 }

@@ -44,11 +44,7 @@ const NewListPage: FC = () => {
 
   const createList = () => {
     if (!listName || volunteers.length === 0) return;
-    const list: ListType = {
-      id: Date.now().toString(),
-      name: listName,
-      volunteers,
-    };
+    const list: ListType = { name: listName, volunteers };
     createListMutation(list, {
       onSuccess: () => navigate(Paths.MyLists),
     });

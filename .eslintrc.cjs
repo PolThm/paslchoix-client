@@ -65,5 +65,6 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'import/prefer-default-export': 'off',
     'react/require-default-props': 'off',
+    '@typescript-eslint/dot-notation': 'off'
   },
 };
