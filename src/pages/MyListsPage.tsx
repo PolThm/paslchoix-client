@@ -31,9 +31,6 @@ const MyListsPage = () => {
   } = useQueryGetLists();
   const myLists: List[] = data ?? [];
 
-  const isLoading = areMyListsLoading || isDeleteListLoading;
-  const isError = areMyListsError || isDeleteListError;
-
   const [currentList, setCurrentList] = useState<List | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -80,13 +77,13 @@ const MyListsPage = () => {
             width: { xs: '100%', sm: '400px' },
           }}
         >
-          {isLoading && <CircularProgress />}
-          {isError && (
+          {areMyListsLoading && <CircularProgress />}
+          {areMyListsError && (
             <Typography variant="body1">
               Oups, une erreur est survenue...
             </Typography>
           )}
-          {!isLoading && !isError && (
+          {!areMyListsLoading && !areMyListsError && (
             <>
               {myLists.map((list) => (
                 <Box
@@ -122,6 +119,8 @@ const MyListsPage = () => {
         isOpen={isConfirmModalOpen}
         handleClose={() => setIsConfirmModalOpen(false)}
         confirmAction={deleteList}
+        isLoading={isDeleteListLoading}
+        isError={isDeleteListError}
       >
         {`Êtes-vous sûr de vouloir supprimer la liste "${currentList?.name}" ?`}
       </ConfirmModal>
