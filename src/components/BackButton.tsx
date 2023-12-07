@@ -21,6 +21,7 @@ const BackButton = () => {
           width: 'max-content',
           transition: isHome ? 'opacity 0.5s ease' : 'opacity 2s ease',
           opacity: isHome ? '0' : '1',
+          pointerEvents: isHome ? 'none' : 'auto',
         }}
       >
         <ArrowBackIcon />
