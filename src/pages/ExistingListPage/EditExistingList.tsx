@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useUpdateList } from '@/mutations/lists';
+import { useQueryGetOneList } from '@/queries/lists';
 import { Paths } from '@/types/enums';
 import { List, Volunteer } from '@/types/interfaces';
 
@@ -15,6 +16,8 @@ type Props = {
 const EditExistingList: FC<Props> = ({ list }) => {
   const navigate = useNavigate();
 
+  const { refetch } = useQueryGetOneList(list['_id']);
+
   const {
     mutate: updateListMutation,
     isLoading: isUpdateListLoading,
@@ -22,9 +25,8 @@ const EditExistingList: FC<Props> = ({ list }) => {
   } = useUpdateList();
 
   const [isModified, setIsModified] = useState(false);
-  const [volunteers, setVolunteers] = useState<Volunteer[]>(
-    list?.volunteers || []
-  );
+  const [volunteers, setVolunteers] = useState<Volunteer[]>(list.volunteers);
+  const [newListName, setNewListName] = useState(list.name);
 
   const deleteChoice = (id: string) => {
     if (!isModified) setIsModified(true);
@@ -40,22 +42,36 @@ const EditExistingList: FC<Props> = ({ list }) => {
     );
   };
 
+  const modifyListName = (newName: string) => {
+    if (!isModified) setIsModified(true);
+    setNewListName(newName);
+  };
+
   const updateList = () => {
     if (!list['_id']) return;
     updateListMutation(
       {
         listId: list['_id'],
-        updatedList: { ...list, volunteers },
+        updatedList: { ...list, volunteers, name: newListName },
       },
       {
-        onSuccess: () => navigate(Paths.MyLists),
+        onSuccess: () => {
+          refetch();
+          navigate(Paths.MyLists);
+        },
       }
     );
   };
 
   return (
     <>
-      {volunteers.map((volunteer) => (
+      <TextField
+        value={newListName}
+        onChange={(e) => modifyListName(e.target.value)}
+        label="Nom de la liste"
+        sx={{ mt: 2 }}
+      />
+      {volunteers.map((volunteer, index) => (
         <Box
           key={volunteer.id}
           sx={{
@@ -69,7 +85,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
           <TextField
             value={volunteer.name}
             onChange={(e) => modifyChoice(volunteer.id, e.target.value)}
-            label="Modifier la personne..."
+            label={`Personne ${index + 1}`}
             sx={{ width: '100%' }}
           />
           <IconButton onClick={() => deleteChoice(volunteer.id)}>
@@ -81,6 +97,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
         <Button
           variant="contained"
           color="secondary"
+          fullWidth
           sx={{
             mt: { xs: 4, sm: 6 },
             mx: 'auto',
