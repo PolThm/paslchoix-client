@@ -70,7 +70,9 @@ const NewListPage: FC = () => {
         />
         {areChoicesVisible && (
           <>
-            <Box sx={{ display: 'flex', mt: 6, width: '100%', mx: 'auto' }}>
+            <Box
+              sx={{ display: 'flex', mt: 6, width: '100%', mx: 'auto', gap: 1 }}
+            >
               <TextField
                 value={newVolunteerName}
                 onChange={(e) => setNewVolunteerName(e.target.value)}

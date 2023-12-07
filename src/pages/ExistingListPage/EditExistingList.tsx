@@ -1,5 +1,15 @@
+import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,6 +37,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
   const [isModified, setIsModified] = useState(false);
   const [volunteers, setVolunteers] = useState<Volunteer[]>(list.volunteers);
   const [newListName, setNewListName] = useState(list.name);
+  const [newVolunteerName, setNewVolunteerName] = useState('');
 
   const deleteChoice = (id: string) => {
     if (!isModified) setIsModified(true);
@@ -45,6 +56,16 @@ const EditExistingList: FC<Props> = ({ list }) => {
   const modifyListName = (newName: string) => {
     if (!isModified) setIsModified(true);
     setNewListName(newName);
+  };
+
+  const addChoice = () => {
+    if (!newVolunteerName) return;
+    if (!isModified) setIsModified(true);
+    setVolunteers([
+      ...volunteers,
+      { id: Date.now().toString(), name: newVolunteerName },
+    ]);
+    setNewVolunteerName('');
   };
 
   const updateList = () => {
@@ -69,7 +90,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
         value={newListName}
         onChange={(e) => modifyListName(e.target.value)}
         label="Nom de la liste"
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, mb: 2 }}
       />
       {volunteers.map((volunteer, index) => (
         <Box
@@ -93,7 +114,21 @@ const EditExistingList: FC<Props> = ({ list }) => {
           </IconButton>
         </Box>
       ))}
-      {isModified && !isUpdateListLoading && (
+      <Box sx={{ display: 'flex', mt: 4, width: '100%', mx: 'auto', gap: 1 }}>
+        <TextField
+          value={newVolunteerName}
+          onChange={(e) => setNewVolunteerName(e.target.value)}
+          label="Nouvelle personne..."
+          sx={{ width: '100%' }}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter') addChoice();
+          }}
+        />
+        <IconButton onClick={addChoice} color="primary">
+          <AddIcon />
+        </IconButton>
+      </Box>
+      {isModified && volunteers.length > 1 && !isUpdateListLoading && (
         <Button
           variant="contained"
           color="secondary"

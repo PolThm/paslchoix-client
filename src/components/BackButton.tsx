@@ -16,7 +16,7 @@ const BackButton = () => {
       <IconButton
         onClick={() => navigate(-1)}
         sx={{
-          mt: { xs: 0.5, md: 2 },
+          mt: { xs: 1, md: 2 },
           ml: { md: 0.5 },
           width: 'max-content',
           transition: isHome ? 'opacity 0.5s ease' : 'opacity 2s ease',
