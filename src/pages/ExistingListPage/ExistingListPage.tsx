@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
