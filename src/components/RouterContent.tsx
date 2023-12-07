@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Container } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
@@ -9,19 +9,26 @@ const RouterContent: FC = () => {
   const location = useLocation();
 
   return (
-    <Paper
-      elevation={3}
-      sx={{ p: 2, flex: 1, borderRadius: 'unset' }}
-      style={{ animation: 'fadein 2s ease' }}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.main
-          key={location.pathname}
-          style={{ height: '100%' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.main
+        key={location.pathname}
+        style={{ flex: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+      >
+        <Container
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            pt: '0px !important',
+            pb: '48px !important',
+            px: '16px !important',
+            height: '100%',
+            animation: 'fadein 2s ease',
+          }}
         >
           <Routes location={location} key={location.pathname}>
             {appRoutes.map((route) => (
@@ -32,9 +39,9 @@ const RouterContent: FC = () => {
               />
             ))}
           </Routes>
-        </motion.main>
-      </AnimatePresence>
-    </Paper>
+        </Container>
+      </motion.main>
+    </AnimatePresence>
   );
 };
 

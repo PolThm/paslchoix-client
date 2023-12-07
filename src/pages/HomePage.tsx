@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -7,15 +7,13 @@ import { Paths } from '@/types/enums';
 
 const HomePage: FC = () => {
   return (
-    <Container
+    <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 1,
-        mt: -2,
-        py: 4,
+        m: 'auto',
       }}
     >
       <Box
@@ -23,6 +21,7 @@ const HomePage: FC = () => {
           display: 'flex',
           alignItems: 'center',
           gap: { sm: 4, md: 6 },
+          mt: -4,
           mb: 3,
           fontSize: { xs: '4.5rem', md: '6rem' },
         }}
@@ -63,6 +62,7 @@ const HomePage: FC = () => {
         <Button
           variant="contained"
           color="primary"
+          fullWidth
           component={NavLink}
           to={Paths.MyLists}
         >
@@ -71,13 +71,14 @@ const HomePage: FC = () => {
         <Button
           variant="contained"
           color="secondary"
+          fullWidth
           component={NavLink}
           to={Paths.NewList}
         >
           Nouvelle liste
         </Button>
       </Box>
-    </Container>
+    </Box>
   );
 };
 

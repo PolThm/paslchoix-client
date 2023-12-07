@@ -8,19 +8,19 @@ html {
     font-size: 1rem;
   }
 
-  .MuiButton-sizeMedium {
-    min-width: 100%;
-  }
-
   .MuiInputLabel-root {
     color: #525457;
+  }
+
+  .MuiContainer-root {
+    padding: unset;
   }
 }
 
 @media (min-width: 600px) { // sm
   html {
     .MuiButton-sizeMedium {
-      min-width: 20rem;
+      min-width: 396px;
     }
 
     .MuiButton-root {

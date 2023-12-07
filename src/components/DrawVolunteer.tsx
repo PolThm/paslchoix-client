@@ -36,7 +36,10 @@ export const DrawVolunteer: FC<Props> = ({ volunteers, currentUser }) => {
           <Button
             variant="contained"
             color="secondary"
-            sx={{ mt: { xs: 2, sm: 4 }, mx: 'auto' }}
+            sx={{
+              mt: { xs: 2, sm: 4 },
+              mx: 'auto',
+            }}
             onClick={drawVolunteer}
           >
             Tirer au sort

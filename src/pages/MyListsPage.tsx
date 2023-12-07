@@ -1,12 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -59,65 +53,60 @@ const MyListsPage = () => {
   };
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        pb: 4,
-      }}
-    >
-      <>
-        <Typography variant="h1" gutterBottom sx={{ mt: 4 }}>
-          Mes listes
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 4,
-            mt: 4,
-            width: { xs: '90%', sm: '400px' },
-          }}
-        >
-          <LoadingErrorHandler
-            isLoading={areMyListsLoading}
-            isError={areMyListsError}
-          />
-          {!areMyListsLoading && !areMyListsError && (
-            <>
-              {myLists.map((list) => (
-                <Box
-                  key={list['_id']}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: { xs: '90%', sm: 400 },
-                    gap: 1,
-                  }}
+    <>
+      <Typography variant="h1" gutterBottom>
+        Mes listes
+      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 4,
+          mt: 4,
+          width: '100%',
+        }}
+      >
+        <LoadingErrorHandler
+          isLoading={areMyListsLoading}
+          isError={areMyListsError}
+        />
+        {!areMyListsLoading && !areMyListsError && (
+          <>
+            {myLists.map((list) => (
+              <Box
+                key={list['_id']}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: { xs: '100%', sm: 'unset' },
+                  gap: 1,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => goToList({ list })}
                 >
-                  <Button variant="outlined" onClick={() => goToList({ list })}>
-                    {list.name}
-                  </Button>
-                  <IconButton onClick={() => goToList({ list, isEdit: true })}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => openConfirmDeleteModal(list)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              ))}
-              {myLists.length === 0 && (
-                <Typography variant="body1">
-                  Vous n'avez pas encore de liste
-                </Typography>
-              )}
-            </>
-          )}
-        </Box>
-      </>
+                  {list.name}
+                </Button>
+                <IconButton onClick={() => goToList({ list, isEdit: true })}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton onClick={() => openConfirmDeleteModal(list)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            ))}
+            {myLists.length === 0 && (
+              <Typography variant="body1">
+                Vous n'avez pas encore de liste
+              </Typography>
+            )}
+          </>
+        )}
+      </Box>
       <ConfirmModal
         isOpen={isConfirmModalOpen}
         handleClose={() => setIsConfirmModalOpen(false)}
@@ -127,7 +116,7 @@ const MyListsPage = () => {
       >
         {`Êtes-vous sûr de vouloir supprimer la liste "${currentList?.name}" ?`}
       </ConfirmModal>
-    </Container>
+    </>
   );
 };
 

@@ -57,48 +57,39 @@ const NewListPage: FC = () => {
   }, [listName]);
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        pb: 4,
-      }}
-    >
-      <>
-        <Typography variant="h1" align="center" gutterBottom sx={{ mt: 4 }}>
-          {listName || 'Nouvelle liste'}
-        </Typography>
-        <Box sx={{ width: { xs: '100%', sm: 400 } }}>
-          <TextField
-            value={listName}
-            onChange={(e) => setListName(e.target.value)}
-            label="Nom de votre liste..."
-            sx={{ width: '100%', mt: 4 }}
-          />
-          {areChoicesVisible && (
-            <>
-              <Box sx={{ display: 'flex', mt: 6, width: '100%', mx: 'auto' }}>
-                <TextField
-                  value={newVolunteerName}
-                  onChange={(e) => setNewVolunteerName(e.target.value)}
-                  label="Nouvelle personne..."
-                  sx={{ width: '100%' }}
-                  onKeyUp={(e) => {
-                    if (e.key === 'Enter') addChoice();
-                  }}
-                />
-                <IconButton onClick={addChoice} color="primary">
-                  <AddIcon />
-                </IconButton>
-              </Box>
-              <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                (Minimum deux personnes)
-              </Typography>
-            </>
-          )}
-        </Box>
-        <List sx={{ width: { xs: '100%', sm: 400 }, mx: 'auto' }}>
+    <>
+      <Typography variant="h1" gutterBottom>
+        {listName || 'Nouvelle liste'}
+      </Typography>
+      <Container maxWidth="xs">
+        <TextField
+          value={listName}
+          onChange={(e) => setListName(e.target.value)}
+          label="Nom de votre liste..."
+          sx={{ width: '100%', mt: 4 }}
+        />
+        {areChoicesVisible && (
+          <>
+            <Box sx={{ display: 'flex', mt: 6, width: '100%', mx: 'auto' }}>
+              <TextField
+                value={newVolunteerName}
+                onChange={(e) => setNewVolunteerName(e.target.value)}
+                label="Nouvelle personne..."
+                sx={{ width: '100%' }}
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') addChoice();
+                }}
+              />
+              <IconButton onClick={addChoice} color="primary">
+                <AddIcon />
+              </IconButton>
+            </Box>
+            <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+              (Minimum deux personnes)
+            </Typography>
+          </>
+        )}
+        <List sx={{ width: { xs: '100%', sm: '100%' }, mx: 'auto' }}>
           {volunteers?.map((volunteer, index) => (
             <Box key={volunteer.id}>
               {index > 0 && <Divider />}
@@ -115,6 +106,7 @@ const NewListPage: FC = () => {
           <Button
             variant="contained"
             color="secondary"
+            fullWidth
             sx={{ mt: { xs: 2, sm: 4 }, mx: 'auto' }}
             onClick={createList}
           >
@@ -126,8 +118,8 @@ const NewListPage: FC = () => {
           isError={isError}
           sx={{ mt: 4 }}
         />
-      </>
-    </Container>
+      </Container>
+    </>
   );
 };
 

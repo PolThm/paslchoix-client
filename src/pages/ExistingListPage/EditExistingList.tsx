@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useUpdateList } from '@/mutations/lists';
-import { useQueryGetOneList } from '@/queries/lists';
 import { Paths } from '@/types/enums';
 import { List, Volunteer } from '@/types/interfaces';
 
@@ -15,8 +14,6 @@ type Props = {
 
 const EditExistingList: FC<Props> = ({ list }) => {
   const navigate = useNavigate();
-
-  const { refetch } = useQueryGetOneList(list['_id']);
 
   const {
     mutate: updateListMutation,
@@ -51,10 +48,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
         updatedList: { ...list, volunteers },
       },
       {
-        onSuccess: () => {
-          navigate(`${Paths.ExistingList}/${list['_id']}`);
-          refetch();
-        },
+        onSuccess: () => navigate(Paths.MyLists),
       }
     );
   };
@@ -87,7 +81,10 @@ const EditExistingList: FC<Props> = ({ list }) => {
         <Button
           variant="contained"
           color="secondary"
-          sx={{ mt: { xs: 4, sm: 6 }, mx: 'auto' }}
+          sx={{
+            mt: { xs: 4, sm: 6 },
+            mx: 'auto',
+          }}
           onClick={updateList}
         >
           Modifier ma liste
