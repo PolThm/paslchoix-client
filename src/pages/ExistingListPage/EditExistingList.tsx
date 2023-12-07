@@ -1,12 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, TextField } from '@mui/material';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,15 +24,18 @@ const EditExistingList: FC<Props> = ({ list }) => {
     isError: isUpdateListError,
   } = useUpdateList();
 
+  const [isModified, setIsModified] = useState(false);
   const [volunteers, setVolunteers] = useState<Volunteer[]>(
     list?.volunteers || []
   );
 
   const deleteChoice = (id: string) => {
+    if (!isModified) setIsModified(true);
     setVolunteers(volunteers.filter((volunteer) => volunteer.id !== id));
   };
 
   const modifyChoice = (volunteerId: string, newName: string) => {
+    if (!isModified) setIsModified(true);
     setVolunteers(
       volunteers.map((v) =>
         v.id === volunteerId ? { ...v, name: newName } : v
@@ -64,70 +60,45 @@ const EditExistingList: FC<Props> = ({ list }) => {
   };
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        pb: 4,
-      }}
-    >
-      <>
-        <Typography variant="h1" gutterBottom sx={{ mt: 4 }}>
-          {list?.name ?? 'Ma liste'}
-        </Typography>
+    <>
+      {volunteers.map((volunteer) => (
         <Box
+          key={volunteer.id}
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            mt: 4,
-            width: { xs: '100%', sm: '400px' },
+            mt: 2,
+            width: '100%',
+            mx: 'auto',
+            gap: 1,
           }}
         >
-          <Typography variant="h2" align="center">
-            Modification
-          </Typography>
-          {volunteers.map((volunteer) => (
-            <Box
-              key={volunteer.id}
-              sx={{
-                display: 'flex',
-                mt: 2,
-                width: '100%',
-                mx: 'auto',
-                gap: 1,
-              }}
-            >
-              <TextField
-                value={volunteer.name}
-                onChange={(e) => modifyChoice(volunteer.id, e.target.value)}
-                label="Modifier la personne..."
-                sx={{ width: '100%' }}
-              />
-              <IconButton onClick={() => deleteChoice(volunteer.id)}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          ))}
+          <TextField
+            value={volunteer.name}
+            onChange={(e) => modifyChoice(volunteer.id, e.target.value)}
+            label="Modifier la personne..."
+            sx={{ width: '100%' }}
+          />
+          <IconButton onClick={() => deleteChoice(volunteer.id)}>
+            <CloseIcon />
+          </IconButton>
         </Box>
-        {!isUpdateListLoading && (
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ mt: { xs: 4, sm: 6 }, mx: 'auto' }}
-            onClick={updateList}
-          >
-            Modifier ma liste
-          </Button>
-        )}
-        <LoadingErrorHandler
-          isLoading={isUpdateListLoading}
-          isError={isUpdateListError}
-          sx={{ mt: 4 }}
-        />
-      </>
-    </Container>
+      ))}
+      {isModified && !isUpdateListLoading && (
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{ mt: { xs: 4, sm: 6 }, mx: 'auto' }}
+          onClick={updateList}
+        >
+          Modifier ma liste
+        </Button>
+      )}
+      <LoadingErrorHandler
+        isLoading={isUpdateListLoading}
+        isError={isUpdateListError}
+        sx={{ mt: 4 }}
+      />
+    </>
   );
 };
 

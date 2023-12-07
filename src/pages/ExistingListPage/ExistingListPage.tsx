@@ -22,10 +22,6 @@ const ExistingListPage = () => {
 
   const [currentUser, setCurrentUser] = useState<Volunteer | null>(null);
 
-  if (state?.isEdit && !isListLoading && !isListError) {
-    return <EditExistingList list={list} />;
-  }
-
   return (
     <Container
       sx={{
@@ -57,18 +53,24 @@ const ExistingListPage = () => {
             {!currentUser ? (
               <>
                 <Typography variant="h2" align="center">
-                  Qui es-tu ?
+                  {state?.isEdit ? 'Modification' : 'Qui es-tu ?'}
                 </Typography>
-                {volunteers.map((volunteer) => (
-                  <Button
-                    key={volunteer.id}
-                    variant="outlined"
-                    sx={{ mt: 2 }}
-                    onClick={() => setCurrentUser(volunteer)}
-                  >
-                    {volunteer.name}
-                  </Button>
-                ))}
+                {state?.isEdit ? (
+                  <EditExistingList list={list} />
+                ) : (
+                  <>
+                    {volunteers.map((volunteer) => (
+                      <Button
+                        key={volunteer.id}
+                        variant="outlined"
+                        sx={{ mt: 2 }}
+                        onClick={() => setCurrentUser(volunteer)}
+                      >
+                        {volunteer.name}
+                      </Button>
+                    ))}
+                  </>
+                )}
               </>
             ) : (
               <>
