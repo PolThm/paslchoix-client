@@ -3,7 +3,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
-  CircularProgress,
   Container,
   Divider,
   IconButton,
@@ -16,6 +15,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useCreateList } from '@/mutations/lists';
 import { Paths } from '@/types/enums';
 import { List as ListType, Volunteer } from '@/types/interfaces';
@@ -25,17 +25,17 @@ const NewListPage: FC = () => {
   const { mutate: createListMutation, isLoading, isError } = useCreateList();
 
   const [listName, setListName] = useState('');
-  const [newVolunteerTitle, setNewVolunteerTitle] = useState('');
+  const [newVolunteerName, setNewVolunteerName] = useState('');
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [areChoicesVisible, setAreChoicesVisible] = useState(false);
 
   const addChoice = () => {
-    if (!newVolunteerTitle) return;
+    if (!newVolunteerName) return;
     setVolunteers([
       ...volunteers,
-      { id: Date.now().toString(), name: newVolunteerTitle },
+      { id: Date.now().toString(), name: newVolunteerName },
     ]);
-    setNewVolunteerTitle('');
+    setNewVolunteerName('');
   };
 
   const deleteChoice = (id: string) => {
@@ -77,27 +77,25 @@ const NewListPage: FC = () => {
             sx={{ width: '100%', mt: 4 }}
           />
           {areChoicesVisible && (
-            <Box
-              sx={{
-                display: 'flex',
-                mt: 6,
-                width: '100%',
-                mx: 'auto',
-              }}
-            >
-              <TextField
-                value={newVolunteerTitle}
-                onChange={(e) => setNewVolunteerTitle(e.target.value)}
-                label="Nouvelle personne..."
-                sx={{ width: '100%' }}
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') addChoice();
-                }}
-              />
-              <IconButton onClick={addChoice} color="primary">
-                <AddIcon />
-              </IconButton>
-            </Box>
+            <>
+              <Box sx={{ display: 'flex', mt: 6, width: '100%', mx: 'auto' }}>
+                <TextField
+                  value={newVolunteerName}
+                  onChange={(e) => setNewVolunteerName(e.target.value)}
+                  label="Nouvelle personne..."
+                  sx={{ width: '100%' }}
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') addChoice();
+                  }}
+                />
+                <IconButton onClick={addChoice} color="primary">
+                  <AddIcon />
+                </IconButton>
+              </Box>
+              <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                (Minimum deux personnes)
+              </Typography>
+            </>
           )}
         </Box>
         <List sx={{ width: { xs: '100%', sm: 400 }, mx: 'auto' }}>
@@ -123,12 +121,11 @@ const NewListPage: FC = () => {
             Créer ma liste
           </Button>
         )}
-        {isLoading && <CircularProgress />}
-        {isError && (
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            Oups, une erreur est survenue...
-          </Typography>
-        )}
+        <LoadingErrorHandler
+          isLoading={isLoading}
+          isError={isError}
+          sx={{ mt: 4 }}
+        />
       </>
     </Container>
   );

@@ -1,4 +1,4 @@
-import ExistingListPage from '@/pages/ExistingListPage';
+import ExistingListPage from '@/pages/ExistingListPage/ExistingListPage';
 import HomePage from '@/pages/HomePage';
 import MyListsPage from '@/pages/MyListsPage';
 import NewListPage from '@/pages/NewListPage';

@@ -9,3 +9,10 @@ export const useQueryGetLists = () => {
     return response.data;
   });
 };
+
+export const useQueryGetOneList = (id?: string) => {
+  return useQuery(['lists', id], async () => {
+    const response = await axios.get(`${apiUrl}/api/lists/${id}`);
+    return response.data;
+  });
+};

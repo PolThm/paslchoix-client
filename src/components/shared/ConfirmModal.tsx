@@ -7,6 +7,8 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 
+import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
+
 type Props = {
   children: string;
   isOpen: boolean;
@@ -38,12 +40,7 @@ const ConfirmModal: FC<Props> = ({
           p: 4,
         }}
       >
-        {isLoading && <CircularProgress />}
-        {isError && (
-          <Typography variant="body1">
-            Oups, une erreur est survenue...
-          </Typography>
-        )}
+        <LoadingErrorHandler isLoading={isLoading} isError={isError} />
         {!isLoading && !isError && (
           <Typography variant="h6" component="h2">
             {children}

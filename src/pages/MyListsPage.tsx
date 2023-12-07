@@ -1,8 +1,8 @@
-import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
   Button,
-  CircularProgress,
   Container,
   IconButton,
   Typography,
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ConfirmModal from '@/components/shared/ConfirmModal';
+import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useDeleteList } from '@/mutations/lists';
 import { useQueryGetLists } from '@/queries/lists';
 import { Paths } from '@/types/enums';
@@ -35,8 +36,10 @@ const MyListsPage = () => {
   const [currentList, setCurrentList] = useState<List | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  const goToList = (list: List) => {
-    navigate(`${Paths.ExistingList}/${list['_id']}`, { state: { list } });
+  const goToList = ({ list, isEdit }: { list: List; isEdit?: boolean }) => {
+    navigate(`${Paths.ExistingList}/${list['_id']}`, {
+      state: { isEdit },
+    });
   };
 
   const openConfirmDeleteModal = (list: List) => {
@@ -76,15 +79,13 @@ const MyListsPage = () => {
             alignItems: 'center',
             gap: 4,
             mt: 4,
-            width: { xs: '100%', sm: '400px' },
+            width: { xs: '90%', sm: '400px' },
           }}
         >
-          {areMyListsLoading && <CircularProgress />}
-          {areMyListsError && (
-            <Typography variant="body1">
-              Oups, une erreur est survenue...
-            </Typography>
-          )}
+          <LoadingErrorHandler
+            isLoading={areMyListsLoading}
+            isError={areMyListsError}
+          />
           {!areMyListsLoading && !areMyListsError && (
             <>
               {myLists.map((list) => (
@@ -97,14 +98,14 @@ const MyListsPage = () => {
                     gap: 1,
                   }}
                 >
-                  <Button variant="outlined" onClick={() => goToList(list)}>
+                  <Button variant="outlined" onClick={() => goToList({ list })}>
                     {list.name}
                   </Button>
-                  <IconButton
-                    onClick={() => openConfirmDeleteModal(list)}
-                    color="primary"
-                  >
-                    <CloseIcon />
+                  <IconButton onClick={() => goToList({ list, isEdit: true })}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => openConfirmDeleteModal(list)}>
+                    <DeleteIcon />
                   </IconButton>
                 </Box>
               ))}
