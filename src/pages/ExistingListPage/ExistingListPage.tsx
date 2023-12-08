@@ -21,6 +21,13 @@ const ExistingListPage = () => {
   const volunteers: Volunteer[] = list?.volunteers || [];
 
   const [currentUser, setCurrentUser] = useState<Volunteer | null>(null);
+  const [isUrlCopied, setIsUrlCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    setIsUrlCopied(true);
+  };
 
   return (
     <>
@@ -62,6 +69,16 @@ const ExistingListPage = () => {
                       {volunteer.name}
                     </Button>
                   ))}
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    fullWidth
+                    sx={{ mt: 4 }}
+                    onClick={copyToClipboard}
+                    disabled={isUrlCopied}
+                  >
+                    {isUrlCopied ? 'Lien copié' : 'Partager ma liste'}
+                  </Button>
                 </>
               )}
             </>
