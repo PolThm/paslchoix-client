@@ -1,7 +1,7 @@
 {
 	"name": "paslchoix-client",
 	"private": true,
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "An engaging and interactive random draw app",
   "license": "MIT",
 	"author": "Pol Thomas",
