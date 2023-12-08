@@ -3,7 +3,6 @@ html {
   box-sizing: border-box;
   scroll-behavior: smooth;
   font-size: 14px;
-  touch-action: pan-y;
 
   .MuiButton-root {
     font-size: 1rem;
@@ -16,6 +15,10 @@ html {
   .MuiContainer-root {
     padding: unset;
   }
+}
+
+body {
+  touch-action: pan-y;
 }
 
 @media (min-width: 600px) { // sm
