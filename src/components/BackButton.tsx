@@ -1,25 +1,21 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const BackButton = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const historyCount = useRef(0);
-  const isFirstPage = historyCount.current <= 1;
+  const [historyCount, setHistoryCount] = useState(0);
+  const isFirstPage = historyCount <= 1;
 
-  useEffect(() => {
-    console.log('location', location);
-    console.log('historyCount', historyCount.current);
-    historyCount.current += 1;
-  }, [location]);
+  useEffect(() => setHistoryCount((prev) => prev + 1), [location]);
 
   const goBack = () => {
     if (isFirstPage) return;
     navigate(-1);
-    historyCount.current -= 2;
+    setHistoryCount((prev) => prev - 2);
   };
 
   return (
