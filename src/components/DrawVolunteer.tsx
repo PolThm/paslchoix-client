@@ -1,27 +1,65 @@
 import { Box, Button, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 
-import { Volunteer } from '@/types/interfaces';
+import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
+import { useUpdateList } from '@/mutations/lists';
+import { List, Volunteer } from '@/types/interfaces';
 
 type Props = {
+  list: List;
   volunteers: Volunteer[];
-  currentUser?: Volunteer;
+  currentUser: Volunteer;
 };
 
-export const DrawVolunteer: FC<Props> = ({ volunteers, currentUser }) => {
+export const DrawVolunteer: FC<Props> = ({ list, volunteers, currentUser }) => {
+  const {
+    mutate: updateListMutation,
+    isLoading: isUpdateListLoading,
+    isError: isUpdateListError,
+  } = useUpdateList();
+
   const [randomVolunteer, setRandomVolunteer] = useState<Volunteer | null>(
     null
   );
 
   const drawVolunteer = (): void => {
     const randomIndex = Math.floor(Math.random() * volunteers.length);
-    const newRandomChoice = volunteers[randomIndex];
+    const newRandomVolunteer = volunteers[randomIndex];
 
-    if (newRandomChoice === (currentUser || randomVolunteer)) {
+    if (
+      newRandomVolunteer === currentUser ||
+      newRandomVolunteer === randomVolunteer ||
+      newRandomVolunteer.isTargeted
+    ) {
       return drawVolunteer();
     }
 
-    return setRandomVolunteer(volunteers[randomIndex]);
+    const currentUserWithTarget = {
+      ...currentUser,
+      target: newRandomVolunteer.id,
+    };
+
+    const newRandomVolunteerTargeted = {
+      ...newRandomVolunteer,
+      isTargeted: true,
+    };
+
+    const newVolunteers = volunteers.map((volunteer) => {
+      if (volunteer.id === currentUser?.id) return currentUserWithTarget;
+      if (volunteer.id === newRandomVolunteer.id)
+        return newRandomVolunteerTargeted;
+      return volunteer;
+    });
+
+    setRandomVolunteer(newRandomVolunteer);
+
+    // TODO: Fix type issue here
+    if (!list['_id']) return; // eslint-disable-line consistent-return
+
+    return updateListMutation({
+      listId: list['_id'],
+      updatedList: { ...list, volunteers: newVolunteers },
+    });
   };
 
   return (
@@ -46,7 +84,12 @@ export const DrawVolunteer: FC<Props> = ({ volunteers, currentUser }) => {
           >
             Tirer au sort
           </Button>
-          {randomVolunteer && (
+          <LoadingErrorHandler
+            isLoading={isUpdateListLoading}
+            isError={isUpdateListError}
+            sx={{ mt: 4 }}
+          />
+          {!isUpdateListLoading && !isUpdateListError && randomVolunteer && (
             <Box key={randomVolunteer.id} sx={{ animation: 'fadein 5s ease' }}>
               <Typography
                 variant="h4"

@@ -91,10 +91,16 @@ const MyListsPage = () => {
                 >
                   {list.name}
                 </Button>
-                <IconButton onClick={() => goToList({ list, isEdit: true })}>
+                <IconButton
+                  color="primary"
+                  onClick={() => goToList({ list, isEdit: true })}
+                >
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => openConfirmDeleteModal(list)}>
+                <IconButton
+                  color="error"
+                  onClick={() => openConfirmDeleteModal(list)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </Box>

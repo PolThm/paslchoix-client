@@ -65,15 +65,16 @@ const ExistingListPage = () => {
                       fullWidth
                       sx={{ mt: 2 }}
                       onClick={() => setCurrentUser(volunteer)}
+                      disabled={!!volunteer.target}
                     >
                       {volunteer.name}
                     </Button>
                   ))}
                   <Button
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     fullWidth
-                    sx={{ mt: 4 }}
+                    sx={{ mt: { xs: 6, sm: 8 } }}
                     onClick={copyToClipboard}
                     disabled={isUrlCopied}
                   >
@@ -96,6 +97,7 @@ const ExistingListPage = () => {
                 , clique sur ce bouton pour savoir qui te sera désigné(e) :
               </Typography>
               <DrawVolunteer
+                list={list}
                 volunteers={volunteers}
                 currentUser={currentUser}
               />
