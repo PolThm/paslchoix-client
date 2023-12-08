@@ -11,7 +11,7 @@ export interface Volunteer {
   id: string;
   name: string;
   target?: string;
-  isTargeted?: boolean;
+  isTargeted: boolean;
 }
 
 export interface List {
