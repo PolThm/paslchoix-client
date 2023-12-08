@@ -36,16 +36,18 @@ export const DrawVolunteer: FC<Props> = ({ volunteers, currentUser }) => {
           <Button
             variant="contained"
             color="secondary"
+            fullWidth
             sx={{
               mt: { xs: 2, sm: 4 },
               mx: 'auto',
             }}
             onClick={drawVolunteer}
+            disabled={!!randomVolunteer}
           >
             Tirer au sort
           </Button>
           {randomVolunteer && (
-            <Box key={randomVolunteer.id} sx={{ animation: 'fadein 5s' }}>
+            <Box key={randomVolunteer.id} sx={{ animation: 'fadein 5s ease' }}>
               <Typography
                 variant="h4"
                 align="center"

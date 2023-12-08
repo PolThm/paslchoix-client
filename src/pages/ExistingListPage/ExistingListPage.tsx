@@ -55,6 +55,7 @@ const ExistingListPage = () => {
                     <Button
                       key={volunteer.id}
                       variant="outlined"
+                      fullWidth
                       sx={{ mt: 2 }}
                       onClick={() => setCurrentUser(volunteer)}
                     >
