@@ -54,7 +54,12 @@ const EditExistingList: FC<Props> = ({ list }) => {
     if (!isModified) setIsModified(true);
     setVolunteers([
       ...volunteers,
-      { id: Date.now().toString(), name: newVolunteerName, isTargeted: false },
+      {
+        id: Date.now().toString(),
+        name: newVolunteerName,
+        target: '',
+        hasDrawn: false,
+      },
     ]);
     setNewVolunteerName('');
   };

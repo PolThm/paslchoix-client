@@ -1,16 +1,17 @@
 import { Button, Container, Typography } from '@mui/material';
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { DrawVolunteer } from '@/components/DrawVolunteer';
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import EditExistingList from '@/pages/ExistingListPage/EditExistingList';
 import { useQueryGetOneList } from '@/queries/lists';
+import { Paths } from '@/types/enums';
 import { Volunteer } from '@/types/interfaces';
 
 const ExistingListPage = () => {
   const { id } = useParams();
-  const { state } = useLocation();
+  const { state, pathname } = useLocation();
+  const navigate = useNavigate();
 
   const {
     data: list,
@@ -20,13 +21,18 @@ const ExistingListPage = () => {
 
   const volunteers: Volunteer[] = list?.volunteers || [];
 
-  const [currentUser, setCurrentUser] = useState<Volunteer | null>(null);
   const [isUrlCopied, setIsUrlCopied] = useState(false);
 
   const copyToClipboard = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
     setIsUrlCopied(true);
+  };
+
+  const goToCurrentUserDraw = (currentUser: Volunteer) => {
+    navigate(`${pathname}${Paths.DrawVolunteer}`, {
+      state: { list, currentUser },
+    });
   };
 
   return (
@@ -49,60 +55,39 @@ const ExistingListPage = () => {
             mt: 4,
           }}
         >
-          {!currentUser ? (
-            <>
-              <Typography variant="h2" align="center">
-                {state?.isEdit ? 'Modification' : 'Qui es-tu ?'}
-              </Typography>
-              {state?.isEdit ? (
-                <EditExistingList list={list} />
-              ) : (
-                <>
-                  {volunteers.map((volunteer) => (
-                    <Button
-                      key={volunteer.id}
-                      variant="outlined"
-                      fullWidth
-                      sx={{ mt: 2 }}
-                      onClick={() => setCurrentUser(volunteer)}
-                      disabled={!!volunteer.target}
-                    >
-                      {volunteer.name}
-                    </Button>
-                  ))}
+          <>
+            <Typography variant="h2" align="center">
+              {state?.isEdit ? 'Modification' : 'Qui es-tu ?'}
+            </Typography>
+            {state?.isEdit ? (
+              <EditExistingList list={list} />
+            ) : (
+              <>
+                {volunteers.map((volunteer) => (
                   <Button
-                    variant="contained"
-                    color="primary"
+                    key={volunteer.id}
+                    variant="outlined"
                     fullWidth
-                    sx={{ mt: { xs: 6, sm: 8 } }}
-                    onClick={copyToClipboard}
-                    disabled={isUrlCopied}
+                    sx={{ mt: 2 }}
+                    onClick={() => goToCurrentUserDraw(volunteer)}
+                    disabled={volunteer.hasDrawn}
                   >
-                    {isUrlCopied ? 'Lien copié' : 'Partager ma liste'}
+                    {volunteer.name}
                   </Button>
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <Typography variant="h2" align="center" sx={{ mb: 2 }}>
-                <Typography
-                  variant="h2"
-                  component="span"
+                ))}
+                <Button
+                  variant="contained"
                   color="primary"
-                  sx={{ fontWeight: 400 }}
+                  fullWidth
+                  sx={{ mt: { xs: 6, sm: 8 } }}
+                  onClick={copyToClipboard}
+                  disabled={isUrlCopied}
                 >
-                  {currentUser.name}
-                </Typography>
-                , clique sur ce bouton pour savoir qui te sera désigné(e) :
-              </Typography>
-              <DrawVolunteer
-                list={list}
-                volunteers={volunteers}
-                currentUser={currentUser}
-              />
-            </>
-          )}
+                  {isUrlCopied ? 'Lien copié' : 'Partager ma liste'}
+                </Button>
+              </>
+            )}
+          </>
         </Container>
       )}
     </>

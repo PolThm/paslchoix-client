@@ -1,3 +1,4 @@
+import DrawVolunteerPage from '@/pages/DrawVolunteerPage';
 import ExistingListPage from '@/pages/ExistingListPage/ExistingListPage';
 import HomePage from '@/pages/HomePage';
 import MyListsPage from '@/pages/MyListsPage';
@@ -5,7 +6,7 @@ import NewListPage from '@/pages/NewListPage';
 import { Paths } from '@/types/enums';
 import { Route } from '@/types/interfaces';
 
-const { Home, NewList, MyLists, ExistingList } = Paths;
+const { Home, NewList, MyLists, ExistingList, DrawVolunteer } = Paths;
 
 export const router: Route[] = [
   {
@@ -31,6 +32,12 @@ export const router: Route[] = [
     title: 'Rejoindre une liste',
     path: `${ExistingList}/:id`,
     component: ExistingListPage,
+  },
+  {
+    key: DrawVolunteer,
+    title: 'Tirer au sort',
+    path: `${ExistingList}/:id${DrawVolunteer}`,
+    component: DrawVolunteerPage,
   },
 ];
 

@@ -16,6 +16,7 @@ import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
+import useDrawVolunteers from '@/hooks/useDrawVolunteers';
 import { useCreateList } from '@/mutations/lists';
 import { Paths } from '@/types/enums';
 import { NewList, Volunteer } from '@/types/interfaces';
@@ -23,6 +24,8 @@ import { NewList, Volunteer } from '@/types/interfaces';
 const NewListPage: FC = () => {
   const navigate = useNavigate();
   const { mutate: createListMutation, isLoading, isError } = useCreateList();
+
+  const drawVolunteers = useDrawVolunteers();
 
   const [listName, setListName] = useState('');
   const [newVolunteerName, setNewVolunteerName] = useState('');
@@ -33,7 +36,12 @@ const NewListPage: FC = () => {
     if (!newVolunteerName) return;
     setVolunteers([
       ...volunteers,
-      { id: Date.now().toString(), name: newVolunteerName, isTargeted: false },
+      {
+        id: Date.now().toString(),
+        name: newVolunteerName,
+        target: '',
+        hasDrawn: false,
+      },
     ]);
     setNewVolunteerName('');
   };
@@ -43,8 +51,11 @@ const NewListPage: FC = () => {
   };
 
   const createList = () => {
-    if (!listName || volunteers.length === 0) return;
-    const list: NewList = { name: listName, volunteers };
+    if (!listName || !volunteers.length) return;
+    const list: NewList = {
+      name: listName,
+      volunteers: drawVolunteers(volunteers),
+    };
     createListMutation(list, {
       onSuccess: () => navigate(Paths.MyLists),
     });

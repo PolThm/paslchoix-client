@@ -8,10 +8,11 @@ export interface Route {
 }
 
 export interface Volunteer {
+  _id?: string;
   id: string;
   name: string;
-  target?: string;
-  isTargeted: boolean;
+  target: string;
+  hasDrawn: boolean;
 }
 
 export interface List {
