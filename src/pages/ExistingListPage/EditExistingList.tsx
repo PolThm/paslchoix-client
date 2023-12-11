@@ -110,20 +110,21 @@ const EditExistingList: FC<Props> = ({ list }) => {
           </IconButton>
         </Box>
       ))}
-      <Box sx={{ display: 'flex', mt: 4, width: '100%', mx: 'auto', gap: 1 }}>
-        <TextField
-          value={newVolunteerName}
-          onChange={(e) => setNewVolunteerName(e.target.value)}
-          label="Nouvelle personne..."
-          sx={{ width: '100%' }}
-          onKeyUp={(e) => {
-            if (e.key === 'Enter') addChoice();
-          }}
-        />
-        <IconButton onClick={addChoice} color="primary">
-          <AddIcon />
-        </IconButton>
-      </Box>
+      {/* TODO: Handle draw before to put back */}
+      {/* <Box sx={{ display: 'flex', mt: 4, width: '100%', mx: 'auto', gap: 1 }}> */}
+      {/*  <TextField */}
+      {/*    value={newVolunteerName} */}
+      {/*    onChange={(e) => setNewVolunteerName(e.target.value)} */}
+      {/*    label="Nouvelle personne..." */}
+      {/*    sx={{ width: '100%' }} */}
+      {/*    onKeyUp={(e) => { */}
+      {/*      if (e.key === 'Enter') addChoice(); */}
+      {/*    }} */}
+      {/*  /> */}
+      {/*  <IconButton onClick={addChoice} color="primary"> */}
+      {/*    <AddIcon /> */}
+      {/*  </IconButton> */}
+      {/* </Box> */}
       <Typography variant="body2" color="primary" sx={{ mt: -1 }}>
         (Minimum trois personnes dans la liste)
       </Typography>
