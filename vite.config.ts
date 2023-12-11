@@ -21,7 +21,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       devOptions: {
         enabled: true,
       },
@@ -38,6 +38,7 @@ export default defineConfig({
         theme_color: '#005E4C',
         background_color: '#005E4C',
         lang: 'fr',
+        start_url: '/',
         orientation: 'portrait',
         icons: [
           {
