@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useUpdateList } from '@/mutations/lists';
@@ -11,10 +11,12 @@ const DrawVolunteerPage = () => {
   const navigate = useNavigate();
   const { state }: { state: { list: List; currentUser: Volunteer } } =
     useLocation();
+  const { id: listId } = useParams();
 
   useEffect(() => {
-    if (!state?.list || !state?.currentUser) navigate(Paths.Home);
-  }, [state, navigate]);
+    if (!state?.list || !state?.currentUser)
+      navigate(`${Paths.ExistingList}/${listId}`);
+  }, [state, navigate, listId]);
 
   const {
     mutate: updateListMutation,
