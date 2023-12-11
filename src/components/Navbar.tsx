@@ -22,7 +22,7 @@ import { Paths } from '@/types/enums';
 import appRoutes from '../routes';
 
 const navMenuItems = appRoutes.filter(
-  (page) => page.key !== Paths.ExistingList
+  (page) => page.key !== Paths.ExistingList && page.key !== Paths.DrawVolunteer
 );
 
 const APP_NAME = "Pas l'choix";
