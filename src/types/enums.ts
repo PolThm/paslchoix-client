@@ -4,4 +4,5 @@ export enum Paths {
   MyLists = '/my-lists',
   ExistingList = '/existing-list',
   DrawVolunteer = '/draw-volunteer',
+  NotFound = '/404',
 }

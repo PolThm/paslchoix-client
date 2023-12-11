@@ -3,10 +3,12 @@ import ExistingListPage from '@/pages/ExistingListPage/ExistingListPage';
 import HomePage from '@/pages/HomePage';
 import MyListsPage from '@/pages/MyListsPage';
 import NewListPage from '@/pages/NewListPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 import { Paths } from '@/types/enums';
 import { Route } from '@/types/interfaces';
 
-const { Home, NewList, MyLists, ExistingList, DrawVolunteer } = Paths;
+const { Home, NewList, MyLists, ExistingList, DrawVolunteer, NotFound } =
+  Paths;
 
 export const router: Route[] = [
   {
@@ -38,6 +40,12 @@ export const router: Route[] = [
     title: 'Tirer au sort',
     path: `${ExistingList}/:id${DrawVolunteer}`,
     component: DrawVolunteerPage,
+  },
+  {
+    key: NotFound,
+    title: '404 Not Found',
+    path: '*',
+    component: NotFoundPage,
   },
 ];
 
