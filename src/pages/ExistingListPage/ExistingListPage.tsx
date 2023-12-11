@@ -79,7 +79,7 @@ const ExistingListPage = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  sx={{ mt: { xs: 6, sm: 8 } }}
+                  sx={{ mt: { xs: 4, sm: 6 } }}
                   onClick={copyToClipboard}
                   disabled={isUrlCopied}
                 >
