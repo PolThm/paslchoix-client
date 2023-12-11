@@ -1,11 +1,11 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { List } from '@/types/interfaces';
+import { List, NewList } from '@/types/interfaces';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const createNewList = async (newList: List) => {
+const createNewList = async (newList: NewList) => {
   const response = await axios.post(`${apiUrl}/api/new-list`, newList);
   return response.data;
 };
@@ -23,7 +23,7 @@ const updateList = async (listId: string, updatedList: List) => {
   return response.data;
 };
 
-export const useCreateList = (): UseMutationResult<List, unknown, List> =>
+export const useCreateList = (): UseMutationResult<NewList, unknown, NewList> =>
   useMutation(createNewList);
 
 export const useDeleteList = (): UseMutationResult<void, unknown, string> =>

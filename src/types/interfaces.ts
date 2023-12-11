@@ -15,7 +15,9 @@ export interface Volunteer {
 }
 
 export interface List {
-  _id?: string;
+  _id: string;
   name: string;
   volunteers: Volunteer[];
 }
+
+export type NewList = Omit<List, '_id'>;

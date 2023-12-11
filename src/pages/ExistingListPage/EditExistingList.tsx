@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ const EditExistingList: FC<Props> = ({ list }) => {
     if (!isModified) setIsModified(true);
     setVolunteers([
       ...volunteers,
-      { id: Date.now().toString(), name: newVolunteerName },
+      { id: Date.now().toString(), name: newVolunteerName, isTargeted: false },
     ]);
     setNewVolunteerName('');
   };
@@ -119,7 +119,10 @@ const EditExistingList: FC<Props> = ({ list }) => {
           <AddIcon />
         </IconButton>
       </Box>
-      {isModified && volunteers.length > 1 && !isUpdateListLoading && (
+      <Typography variant="body2" color="primary" sx={{ mt: -1 }}>
+        (Minimum trois personnes dans la liste)
+      </Typography>
+      {isModified && volunteers.length >= 3 && !isUpdateListLoading && (
         <Button
           variant="contained"
           color="secondary"

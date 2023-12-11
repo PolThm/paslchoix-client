@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
 import { useCreateList } from '@/mutations/lists';
 import { Paths } from '@/types/enums';
-import { List as ListType, Volunteer } from '@/types/interfaces';
+import { NewList, Volunteer } from '@/types/interfaces';
 
 const NewListPage: FC = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const NewListPage: FC = () => {
     if (!newVolunteerName) return;
     setVolunteers([
       ...volunteers,
-      { id: Date.now().toString(), name: newVolunteerName },
+      { id: Date.now().toString(), name: newVolunteerName, isTargeted: false },
     ]);
     setNewVolunteerName('');
   };
@@ -44,7 +44,7 @@ const NewListPage: FC = () => {
 
   const createList = () => {
     if (!listName || volunteers.length === 0) return;
-    const list: ListType = { name: listName, volunteers };
+    const list: NewList = { name: listName, volunteers };
     createListMutation(list, {
       onSuccess: () => navigate(Paths.MyLists),
     });
@@ -87,7 +87,7 @@ const NewListPage: FC = () => {
               </IconButton>
             </Box>
             <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-              (Minimum deux personnes)
+              (Minimum trois personnes)
             </Typography>
           </>
         )}
@@ -104,7 +104,7 @@ const NewListPage: FC = () => {
             </Box>
           ))}
         </List>
-        {volunteers.length > 1 && !isLoading && (
+        {volunteers.length >= 3 && !isLoading && (
           <Button
             variant="contained"
             color="secondary"
