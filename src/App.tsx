@@ -1,30 +1,12 @@
 import { Box } from '@mui/material';
-import { FC, useEffect } from 'react';
-import { registerSW } from 'virtual:pwa-register';
+import { FC } from 'react';
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import ReloadPrompt from '@/components/ReloadPrompt';
 import RouterContent from '@/components/RouterContent';
 
 const App: FC = () => {
-  useEffect(() => {
-    const updateSW = registerSW({
-      onNeedRefresh() {
-        if (
-          window.confirm(
-            "Une nouvelle version est disponible. Voulez-vous recharger pour l'utiliser ?"
-          )
-        ) {
-          window.location.reload();
-        }
-      },
-    });
-
-    return () => {
-      updateSW();
-    };
-  }, []);
-
   return (
     <Box
       display="flex"
@@ -35,6 +17,7 @@ const App: FC = () => {
       <Navbar />
       <RouterContent />
       <Footer />
+      <ReloadPrompt />
     </Box>
   );
 };

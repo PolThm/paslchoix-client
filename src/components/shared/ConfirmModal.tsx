@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Modal,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Modal, Typography } from '@mui/material';
 import { FC } from 'react';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
