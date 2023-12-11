@@ -110,7 +110,6 @@ const EditExistingList: FC<Props> = ({ list }) => {
           </IconButton>
         </Box>
       ))}
-      {/* TODO: Handle draw before to put back */}
       {/* <Box sx={{ display: 'flex', mt: 4, width: '100%', mx: 'auto', gap: 1 }}> */}
       {/*  <TextField */}
       {/*    value={newVolunteerName} */}
