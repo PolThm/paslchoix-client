@@ -1,10 +1,14 @@
-import { Fragment } from 'react';
 import {
   Category,
   Component,
-  Variant,
   Palette,
+  Variant,
 } from '@react-buddy/ide-toolbox';
+import MUIPalette from '@react-buddy/palette-mui';
+
+export const ExampleLoaderComponent = () => {
+  return <>Loading...</>;
+};
 
 export const PaletteTree = () => (
   <Palette>
@@ -15,9 +19,6 @@ export const PaletteTree = () => (
         </Variant>
       </Component>
     </Category>
+    <MUIPalette />
   </Palette>
 );
-
-export function ExampleLoaderComponent() {
-  return <Fragment>Loading...</Fragment>;
-}
