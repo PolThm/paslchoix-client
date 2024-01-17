@@ -17,6 +17,7 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3000',
     },
+    host: '127.0.0.1',
   },
   plugins: [
     react(),
