@@ -67,5 +67,11 @@ module.exports = {
     'react/require-default-props': 'off',
     '@typescript-eslint/dot-notation': 'off',
     'no-plusplus': 'off',
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   },
 };
