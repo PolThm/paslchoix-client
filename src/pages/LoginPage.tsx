@@ -65,6 +65,12 @@ const LoginPage: FC = () => {
               : (errors.loginPassword = 'Mot de passe incorrect');
             setFormErrors(errors);
           }
+        })
+        .catch(() => {
+          const errors: Record<string, string> = {};
+          errors.submit =
+            'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
+          setFormErrors(errors);
         });
     } else {
       const errors: Record<string, string> = {};
@@ -122,6 +128,11 @@ const LoginPage: FC = () => {
         >
           Se connecter
         </Button>
+        <FormControl margin="normal" fullWidth error={!!formErrors.submit}>
+          {formErrors.submit && (
+            <FormHelperText>{formErrors.submit}</FormHelperText>
+          )}
+        </FormControl>
       </form>
     </Container>
   );
