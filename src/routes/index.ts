@@ -62,14 +62,14 @@ export const router: Route[] = [
     key: ExistingList,
     title: 'Rejoindre une liste',
     path: `${ExistingList}/:id`,
-    condition: loggedIn,
+    condition: noCondition,
     component: ExistingListPage,
   },
   {
     key: DrawVolunteer,
     title: 'Tirer au sort',
     path: `${ExistingList}/:id${DrawVolunteer}`,
-    condition: loggedIn,
+    condition: noCondition,
     component: DrawVolunteerPage,
   },
   {
