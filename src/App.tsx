@@ -52,7 +52,7 @@ const App: FC = () => {
         <Navbar />
         <RouterContent />
         <Footer />
-        {/* <ReloadPrompt /> */}
+        {/* <ReloadPrompt /> // TODO: Fix PWA auto update */}
       </Box>
       <Snackbar
         open={isWelcomeSnackbarOpen}
