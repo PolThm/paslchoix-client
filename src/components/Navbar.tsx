@@ -16,26 +16,33 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 import logoGift from '@/assets/img/logo-gift.png';
 import BackButton from '@/components/BackButton';
-import ConfirmModal from '@/components/shared/ConfirmModal';
+import { useAuth } from '@/contexts/AuthContext';
+import appRoutes from '@/routes';
 import { Paths } from '@/types/enums';
 
-import appRoutes from '../routes';
-
-const navMenuItems = appRoutes.filter(
+const loggedInMenuItems = appRoutes.filter(
   (page) =>
-    page.key !== Paths.ExistingList &&
-    page.key !== Paths.DrawVolunteer &&
-    page.key !== Paths.NotFound
+    page.key === Paths.Home ||
+    page.key === Paths.MyLists ||
+    page.key === Paths.NewList
+);
+
+const loggedOutMenuItems = appRoutes.filter(
+  (page) =>
+    page.key === Paths.Home ||
+    page.key === Paths.Login ||
+    page.key === Paths.Register
 );
 
 const APP_NAME = "Pas l'choix";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn, setUsername } = useAuth();
+  const navMenuItems = isLoggedIn ? loggedInMenuItems : loggedOutMenuItems;
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -48,11 +55,11 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
-  const confirmLocalStorageReset = () => {
-    setIsConfirmModalOpen(false);
-    localStorage.clear();
+  const logout = () => {
+    setUsername('');
+    setIsLoggedIn(false);
+    localStorage.removeItem('token');
     navigate(Paths.Home);
-    window.location.reload();
   };
 
   return (
@@ -167,55 +174,45 @@ const Navbar = () => {
                   </MenuItem>
                 </Link>
               ))}
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography
-                  onClick={() => setIsConfirmModalOpen(true)}
-                  color="error"
-                >
-                  Déconnexion
-                </Typography>
-              </MenuItem>
+              {isLoggedIn && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography onClick={logout} color="error">
+                    Déconnexion
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
 
-          <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 2 }}>
-              <Avatar
-                alt="profile image"
-                src="https://source.unsplash.com/random/40×40"
-                sx={{ backgroundColor: 'primary.light' }}
-              />
-            </IconButton>
-            <Menu
-              sx={{ mt: '2.8rem' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              keepMounted
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  textAlign="center"
-                  onClick={() => setIsConfirmModalOpen(true)}
-                  color="error"
-                >
-                  Déconnexion
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+          {isLoggedIn && (
+            <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 2 }}>
+                <Avatar
+                  alt="profile image"
+                  src="https://source.unsplash.com/random/40×40"
+                  sx={{ backgroundColor: 'primary.light' }}
+                />
+              </IconButton>
+              <Menu
+                sx={{ mt: '2.8rem' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                keepMounted
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center" onClick={logout} color="error">
+                    Déconnexion
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
-      <ConfirmModal
-        isOpen={isConfirmModalOpen}
-        handleClose={() => setIsConfirmModalOpen(false)}
-        confirmAction={() => confirmLocalStorageReset()}
-      >
-        Êtes-vous sûr de vouloir réinitialiser la sauvegarde locale ?
-      </ConfirmModal>
     </AppBar>
   );
 };

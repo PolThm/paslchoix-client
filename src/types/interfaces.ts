@@ -1,9 +1,12 @@
 import { FC } from 'react';
 
+import { RouteConditions } from '@/types/enums';
+
 export interface Route {
   key: string;
   title: string;
   path: string;
+  condition: RouteConditions;
   component: FC;
 }
 
@@ -18,6 +21,7 @@ export interface Volunteer {
 export interface List {
   _id: string;
   name: string;
+  owner: string;
   volunteers: Volunteer[];
 }
 

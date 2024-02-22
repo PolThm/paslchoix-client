@@ -3,9 +3,12 @@ import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logoGift from '@/assets/img/logo-gift.png';
+import { useAuth } from '@/contexts/AuthContext';
 import { Paths } from '@/types/enums';
 
 const HomePage: FC = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <Box
       sx={{
@@ -64,18 +67,18 @@ const HomePage: FC = () => {
           color="primary"
           fullWidth
           component={NavLink}
-          to={Paths.MyLists}
+          to={isLoggedIn ? Paths.MyLists : Paths.Login}
         >
-          Mes listes
+          {isLoggedIn ? 'Mes listes' : 'Connexion'}
         </Button>
         <Button
           variant="contained"
           color="secondary"
           fullWidth
           component={NavLink}
-          to={Paths.NewList}
+          to={isLoggedIn ? Paths.NewList : Paths.Register}
         >
-          Nouvelle liste
+          {isLoggedIn ? 'Nouvelle liste' : 'Inscription'}
         </Button>
       </Box>
     </Box>

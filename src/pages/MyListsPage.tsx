@@ -1,11 +1,12 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button, IconButton, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ConfirmModal from '@/components/shared/ConfirmModal';
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
+import { useAuth } from '@/contexts/AuthContext';
 import { useDeleteList } from '@/mutations/lists';
 import { useQueryGetLists } from '@/queries/lists';
 import { Paths } from '@/types/enums';
@@ -13,6 +14,7 @@ import { List } from '@/types/interfaces';
 
 const MyListsPage = () => {
   const navigate = useNavigate();
+  const { username } = useAuth();
 
   const {
     mutate: deleteListMutation,
@@ -20,15 +22,15 @@ const MyListsPage = () => {
     isError: isDeleteListError,
   } = useDeleteList();
   const {
-    data,
+    data: myListsData,
     isLoading: areMyListsLoading,
     isError: areMyListsError,
     refetch,
-  } = useQueryGetLists();
-  const myLists: List[] = data ?? [];
+  } = useQueryGetLists(username);
 
   const [currentList, setCurrentList] = useState<List | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [myLists, setMyLists] = useState<List[]>([]);
 
   const goToList = ({ list, isEdit }: { list: List; isEdit?: boolean }) => {
     navigate(`${Paths.ExistingList}/${list['_id']}`, {
@@ -51,6 +53,13 @@ const MyListsPage = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if (username) {
+      refetch();
+      setMyLists(myListsData ?? []);
+    }
+  }, [myListsData, refetch, username]);
 
   return (
     <>
@@ -106,9 +115,19 @@ const MyListsPage = () => {
               </Box>
             ))}
             {myLists.length === 0 && (
-              <Typography variant="body1">
-                Vous n'avez pas encore de liste
-              </Typography>
+              <>
+                <Typography variant="body1">
+                  Vous n'avez pas encore de liste
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ width: { xs: '100%', sm: 'unset' } }}
+                  onClick={() => navigate(Paths.NewList)}
+                >
+                  Créer une liste
+                </Button>
+              </>
             )}
           </>
         )}

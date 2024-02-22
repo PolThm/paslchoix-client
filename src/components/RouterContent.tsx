@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FC } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
+import ConditionalRoute from '@/components/ConditionalRoute';
 import appRoutes from '@/routes';
 
 const RouterContent: FC = () => {
@@ -34,7 +35,11 @@ const RouterContent: FC = () => {
               <Route
                 key={route.key}
                 path={route.path}
-                element={<route.component />}
+                element={
+                  <ConditionalRoute condition={route.condition}>
+                    <route.component />
+                  </ConditionalRoute>
+                }
               />
             ))}
           </Routes>

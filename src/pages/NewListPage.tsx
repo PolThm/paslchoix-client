@@ -16,6 +16,7 @@ import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LoadingErrorHandler from '@/components/shared/LoaderErrorHandler';
+import { useAuth } from '@/contexts/AuthContext';
 import useDrawVolunteers from '@/hooks/useDrawVolunteers';
 import { useCreateList } from '@/mutations/lists';
 import { Paths } from '@/types/enums';
@@ -23,6 +24,7 @@ import { NewList, Volunteer } from '@/types/interfaces';
 
 const NewListPage: FC = () => {
   const navigate = useNavigate();
+  const { username } = useAuth();
   const { mutate: createListMutation, isLoading, isError } = useCreateList();
 
   const drawVolunteers = useDrawVolunteers();
@@ -54,6 +56,7 @@ const NewListPage: FC = () => {
     if (!listName || !volunteers.length) return;
     const list: NewList = {
       name: listName,
+      owner: username,
       volunteers: drawVolunteers(volunteers),
     };
     createListMutation(list, {
