@@ -7,6 +7,8 @@ import RouterContent from '@/components/RouterContent';
 import { AuthContext } from '@/contexts/AuthContext';
 // import ReloadPrompt from '@/components/ReloadPrompt';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const App: FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
@@ -29,7 +31,7 @@ const App: FC = () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    fetch('/api/is-user-auth', {
+    fetch(`${apiUrl}/api/is-user-auth`, {
       headers: { 'x-access-token': token || '' },
     })
       .then((res) => res.json())

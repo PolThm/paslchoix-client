@@ -12,6 +12,8 @@ import { z } from 'zod';
 
 import { Paths } from '@/types/enums';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const registerFormSchema = z
   .object({
     username: z.string().min(1, { message: "Nom d'utilisateur requis" }),
@@ -47,7 +49,7 @@ const RegisterPage: FC = () => {
     if (result.success) {
       setFormErrors({});
       const userInfo = { username, email, password };
-      fetch('/api/register', {
+      fetch(`${apiUrl}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userInfo),

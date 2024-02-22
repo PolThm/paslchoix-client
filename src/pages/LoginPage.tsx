@@ -20,6 +20,8 @@ const loginFormSchema = z.object({
     .min(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' }),
 });
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const LoginPage: FC = () => {
   const { setIsLoggedIn, setUsername } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ const LoginPage: FC = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const fetchUser = async () => {
-    const res = await fetch('/api/is-user-auth', {
+    const res = await fetch(`${apiUrl}/api/is-user-auth`, {
       headers: { 'x-access-token': localStorage.getItem('token') || '' },
     });
     const data = await res.json();
@@ -48,7 +50,7 @@ const LoginPage: FC = () => {
     if (result.success) {
       const user = { username: loginUsername, password: loginPassword };
 
-      fetch('/api/login', {
+      fetch(`${apiUrl}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
