@@ -68,7 +68,8 @@ const RegisterPage: FC = () => {
             setFormErrors(errors);
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           const errors: Record<string, string> = {};
           errors.submit =
             'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
