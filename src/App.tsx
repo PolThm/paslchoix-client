@@ -5,9 +5,8 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import RouterContent from '@/components/RouterContent';
 import { AuthContext } from '@/contexts/AuthContext';
+import { useFetchUser } from '@/queries/user';
 // import ReloadPrompt from '@/components/ReloadPrompt';
-
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const App: FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,21 +26,14 @@ const App: FC = () => {
     if (username) setIsWelcomeSnackbarOpen(true);
   }, [isLoggedIn, username]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+  const { data: userData } = useFetchUser(localStorage.getItem('token') || '');
 
-    fetch(`${apiUrl}/api/is-user-auth`, {
-      headers: { 'x-access-token': token || '' },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.isLoggedIn) {
-          setIsLoggedIn(true);
-          setUsername(data.username);
-        }
-      });
-  }, []);
+  useEffect(() => {
+    if (userData?.isLoggedIn) {
+      setUsername(userData.username);
+      setIsLoggedIn(true);
+    }
+  }, [userData]);
 
   return (
     <AuthContext.Provider value={authValue}>

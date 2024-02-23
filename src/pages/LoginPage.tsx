@@ -6,11 +6,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useLoginUser } from '@/mutations/user';
+import { useFetchUser } from '@/queries/user';
 import { Paths } from '@/types/enums';
 
 const loginFormSchema = z.object({
@@ -20,8 +22,6 @@ const loginFormSchema = z.object({
     .min(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' }),
 });
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
 const LoginPage: FC = () => {
   const { setIsLoggedIn, setUsername } = useAuth();
   const navigate = useNavigate();
@@ -30,19 +30,18 @@ const LoginPage: FC = () => {
   const [loginPassword, setLoginPassword] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  const fetchUser = async () => {
-    const res = await fetch(`${apiUrl}/api/is-user-auth`, {
-      headers: { 'x-access-token': localStorage.getItem('token') || '' },
-    });
-    const data = await res.json();
-    if (data.isLoggedIn) {
-      setUsername(data.username);
+  const loginUserMutation = useLoginUser();
+  const { data: userData } = useFetchUser(localStorage.getItem('token') || '');
+
+  useEffect(() => {
+    if (userData?.isLoggedIn) {
+      setUsername(userData.username);
       setIsLoggedIn(true);
       navigate(Paths.Home);
     }
-  };
+  }, [navigate, setIsLoggedIn, setUsername, userData]);
 
-  const handleLogin = (event: FormEvent) => {
+  const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
 
     const result = loginFormSchema.safeParse({ loginUsername, loginPassword });
@@ -50,31 +49,30 @@ const LoginPage: FC = () => {
     if (result.success) {
       const user = { username: loginUsername, password: loginPassword };
 
-      fetch(`${apiUrl}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-            fetchUser();
-          } else {
+      try {
+        await loginUserMutation.mutateAsync(user, {
+          onSuccess: (data) => {
+            if (data.token) {
+              localStorage.setItem('token', data.token);
+            } else {
+              const errors: Record<string, string> = {};
+              data.errorWith === 'loginUsername' // eslint-disable-line @typescript-eslint/no-unused-expressions
+                ? (errors.loginUsername = "Ce nom d'utilisateur n'existe pas")
+                : (errors.loginPassword = 'Mot de passe incorrect');
+              setFormErrors(errors);
+            }
+          },
+          onError: (error) => {
+            console.log('error', error);
             const errors: Record<string, string> = {};
-            data.errorWith === 'loginUsername' // eslint-disable-line @typescript-eslint/no-unused-expressions
-              ? (errors.loginUsername = "Ce nom d'utilisateur n'existe pas")
-              : (errors.loginPassword = 'Mot de passe incorrect');
+            errors.submit =
+              'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
             setFormErrors(errors);
-          }
-        })
-        .catch((error) => {
-          console.log('error', error);
-          const errors: Record<string, string> = {};
-          errors.submit =
-            'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
-          setFormErrors(errors);
+          },
         });
+      } catch (error) {
+        console.error('error', error);
+      }
     } else {
       const errors: Record<string, string> = {};
       result.error.issues.forEach((issue) => {

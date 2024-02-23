@@ -10,9 +10,8 @@ import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
+import { useRegisterUser } from '@/mutations/user';
 import { Paths } from '@/types/enums';
-
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const registerFormSchema = z
   .object({
@@ -37,6 +36,8 @@ const RegisterPage: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
+  const registerUserMutation = useRegisterUser();
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     const result = registerFormSchema.safeParse({
@@ -49,13 +50,8 @@ const RegisterPage: FC = () => {
     if (result.success) {
       setFormErrors({});
       const userInfo = { username, email, password };
-      fetch(`${apiUrl}/api/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userInfo),
-      })
-        .then((res) => res.json())
-        .then((data) => {
+      registerUserMutation.mutateAsync(userInfo, {
+        onSuccess: (data) => {
           if (data.createdAt) {
             navigate(Paths.Login);
           } else {
@@ -69,14 +65,15 @@ const RegisterPage: FC = () => {
             }
             setFormErrors(errors);
           }
-        })
-        .catch((error) => {
+        },
+        onError: (error) => {
           console.error(error);
           const errors: Record<string, string> = {};
           errors.submit =
             'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
           setFormErrors(errors);
-        });
+        },
+      });
     } else {
       const errors: Record<string, string> = {};
       result.error.issues.forEach((issue) => {
