@@ -34,7 +34,7 @@ export default defineConfig({
       manifest: {
         name: "Pas l'choix",
         short_name: "Pas l'choix",
-        description: 'Une application pour désigner des volontaires',
+        description: 'Une « Secret Santa » app, et bien plus.',
         theme_color: '#005E4C',
         background_color: '#005E4C',
         lang: 'fr',

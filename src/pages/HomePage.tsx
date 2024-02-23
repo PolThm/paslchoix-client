@@ -50,7 +50,7 @@ const HomePage: FC = () => {
         textAlign="center"
         sx={{ fontSize: '2.5rem', mb: { xs: 6, md: 8 } }}
       >
-        Une application pour désigner des volontaires
+        Une « Secret Santa » app, et bien plus.
       </Typography>
       <Box
         sx={{
