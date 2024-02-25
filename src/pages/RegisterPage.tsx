@@ -15,11 +15,26 @@ import { Paths } from '@/types/enums';
 
 const registerFormSchema = z
   .object({
-    username: z.string().min(1, { message: "Nom d'utilisateur requis" }),
-    email: z.string().email({ message: 'Adresse email non valide' }),
-    password: z.string().min(6, {
-      message: 'Le mot de passe doit contenir au moins 6 caractères',
-    }),
+    username: z
+      .string()
+      .min(1, { message: "Nom d'utilisateur requis" })
+      .refine((value) => !value.includes(' '), {
+        message: "Le nom d'utilisateur ne doit pas contenir d'espaces",
+      }),
+    email: z
+      .string()
+      .email({ message: 'Adresse email non valide' })
+      .refine((value) => !value.includes(' '), {
+        message: "L'email ne doit pas contenir d'espaces",
+      }),
+    password: z
+      .string()
+      .min(6, {
+        message: 'Le mot de passe doit contenir au moins 6 caractères',
+      })
+      .refine((value) => !value.includes(' '), {
+        message: "Le mot de passe ne doit pas contenir d'espaces",
+      }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

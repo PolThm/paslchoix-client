@@ -16,10 +16,18 @@ import { useFetchUser } from '@/queries/user';
 import { Paths } from '@/types/enums';
 
 const loginFormSchema = z.object({
-  loginUsername: z.string().min(1, { message: "Nom d'utilisateur requis" }),
+  loginUsername: z
+    .string()
+    .min(1, { message: "Nom d'utilisateur requis" })
+    .refine((value) => !value.includes(' '), {
+      message: "Le nom d'utilisateur ne peut pas contenir d'espaces",
+    }),
   loginPassword: z
     .string()
-    .min(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' }),
+    .min(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' })
+    .refine((value) => !value.includes(' '), {
+      message: "Le mot de passe ne peut pas contenir d'espaces",
+    }),
 });
 
 const LoginPage: FC = () => {
@@ -62,7 +70,7 @@ const LoginPage: FC = () => {
             }
           },
           onError: (error) => {
-            console.log('error', error);
+            console.error('error', error);
             const errors: Record<string, string> = {};
             errors.submit =
               'Une erreur est survenue lors de la connexion. Veuillez réessayer.';
