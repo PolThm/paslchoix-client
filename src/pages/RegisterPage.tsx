@@ -10,6 +10,7 @@ import { FC, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { useRegisterUser } from '@/mutations/user';
 import { Paths } from '@/types/enums';
 
@@ -44,6 +45,7 @@ const registerFormSchema = z
 
 const RegisterPage: FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -68,6 +70,7 @@ const RegisterPage: FC = () => {
       registerUserMutation.mutateAsync(userInfo, {
         onSuccess: (data) => {
           if (data.createdAt) {
+            setUser({ isLoggedIn: false, username: data.username || '' });
             navigate(Paths.Login);
           } else {
             const errors: Record<string, string> = {};

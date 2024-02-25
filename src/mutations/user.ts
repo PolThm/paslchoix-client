@@ -28,8 +28,12 @@ export const useLoginUser = (): UseMutationResult<
 
 export const useRegisterUser = (): UseMutationResult<
   {
+    username?: string;
+    email?: string;
+    password?: string;
+    createdAt?: string;
+    _id?: string;
     message?: string;
-    createdAt: string;
     errorWith?: string;
   },
   unknown,

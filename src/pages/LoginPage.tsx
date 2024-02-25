@@ -31,10 +31,10 @@ const loginFormSchema = z.object({
 });
 
 const LoginPage: FC = () => {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
-  const [loginUsername, setLoginUsername] = useState('');
+  const [loginUsername, setLoginUsername] = useState(user.username);
   const [loginPassword, setLoginPassword] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
