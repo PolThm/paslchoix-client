@@ -7,7 +7,7 @@ export const useQueryGetLists = (username: string) => {
   return useQuery(
     ['lists'],
     async () => {
-      const response = await axios.get(`${apiUrl}/api/lists?owner=${username}`);
+      const response = await axios.get(`${apiUrl}/api/lists`);
       return response.data;
     },
     {

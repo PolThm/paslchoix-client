@@ -21,7 +21,7 @@ export interface Volunteer {
 export interface List {
   _id: string;
   name: string;
-  owner: string;
+  owner?: string;
   volunteers: Volunteer[];
 }
 
