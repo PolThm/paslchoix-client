@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Paths } from '@/types/enums';
 
 const HomePage: FC = () => {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Box
@@ -67,18 +67,18 @@ const HomePage: FC = () => {
           color="primary"
           fullWidth
           component={NavLink}
-          to={isLoggedIn ? Paths.MyLists : Paths.Login}
+          to={user.isLoggedIn ? Paths.MyLists : Paths.Login}
         >
-          {isLoggedIn ? 'Mes listes' : 'Connexion'}
+          {user.isLoggedIn ? 'Mes listes' : 'Connexion'}
         </Button>
         <Button
           variant="contained"
           color="secondary"
           fullWidth
           component={NavLink}
-          to={isLoggedIn ? Paths.NewList : Paths.Register}
+          to={user.isLoggedIn ? Paths.NewList : Paths.Register}
         >
-          {isLoggedIn ? 'Nouvelle liste' : 'Inscription'}
+          {user.isLoggedIn ? 'Nouvelle liste' : 'Inscription'}
         </Button>
       </Box>
     </Box>

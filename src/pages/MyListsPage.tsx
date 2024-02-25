@@ -14,7 +14,7 @@ import { List } from '@/types/interfaces';
 
 const MyListsPage = () => {
   const navigate = useNavigate();
-  const { username } = useAuth();
+  const { user } = useAuth();
 
   const {
     mutate: deleteListMutation,
@@ -26,7 +26,7 @@ const MyListsPage = () => {
     isLoading: areMyListsLoading,
     isError: areMyListsError,
     refetch,
-  } = useQueryGetLists(username);
+  } = useQueryGetLists(user.username);
 
   const [currentList, setCurrentList] = useState<List | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -55,11 +55,11 @@ const MyListsPage = () => {
   };
 
   useEffect(() => {
-    if (username) {
+    if (user.username) {
       refetch();
       setMyLists(myListsData ?? []);
     }
-  }, [myListsData, refetch, username]);
+  }, [myListsData, refetch, user.username]);
 
   return (
     <>

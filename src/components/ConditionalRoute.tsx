@@ -11,12 +11,12 @@ interface Props extends PropsWithChildren {
 }
 
 const ConditionalRoute: FC<Props> = ({ children, condition }) => {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
 
   if (
     !isValidElement(children) ||
-    (condition === loggedOut && isLoggedIn) ||
-    (condition === loggedIn && !isLoggedIn)
+    (condition === loggedOut && user.isLoggedIn) ||
+    (condition === loggedIn && !user.isLoggedIn)
   ) {
     return <Navigate to={Paths.Home} />;
   }

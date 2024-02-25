@@ -25,4 +25,9 @@ export interface List {
   volunteers: Volunteer[];
 }
 
+export interface UserAuth {
+  isLoggedIn: boolean;
+  username: string;
+}
+
 export type NewList = Omit<List, '_id'>;

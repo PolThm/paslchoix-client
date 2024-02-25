@@ -6,32 +6,26 @@ import Navbar from '@/components/Navbar';
 import RouterContent from '@/components/RouterContent';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useFetchUser } from '@/queries/user';
+import { UserAuth } from '@/types/interfaces';
 // import ReloadPrompt from '@/components/ReloadPrompt';
 
 const App: FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [user, setUser] = useState<UserAuth>({
+    isLoggedIn: false,
+    username: '',
+  });
   const [isWelcomeSnackbarOpen, setIsWelcomeSnackbarOpen] = useState(false);
-  const authValue = useMemo(
-    () => ({
-      isLoggedIn,
-      setIsLoggedIn,
-      username,
-      setUsername,
-    }),
-    [isLoggedIn, username]
-  );
+  const authValue = useMemo(() => ({ user, setUser }), [user]);
 
   useEffect(() => {
-    if (username) setIsWelcomeSnackbarOpen(true);
-  }, [isLoggedIn, username]);
+    if (user.username) setIsWelcomeSnackbarOpen(true);
+  }, [user]);
 
   const { data: userData } = useFetchUser(localStorage.getItem('token') || '');
 
   useEffect(() => {
     if (userData?.isLoggedIn) {
-      setUsername(userData.username);
-      setIsLoggedIn(true);
+      setUser({ isLoggedIn: true, username: userData.username });
     }
   }, [userData]);
 
@@ -61,7 +55,7 @@ const App: FC = () => {
               component="span"
               sx={{ fontWeight: 'bold', display: 'inline' }}
             >
-              {` ${username}`}
+              {` ${user.username}`}
             </Typography>
           </Typography>
         }

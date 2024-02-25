@@ -1,17 +1,18 @@
 import React, { useContext } from 'react';
 
+import { UserAuth } from '@/types/interfaces';
+
 type AuthContextType = {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (value: boolean) => void;
-  username: string;
-  setUsername: (value: string) => void;
+  user: UserAuth;
+  setUser: (value: { isLoggedIn: boolean; username: string }) => void;
 };
 
 export const AuthContext = React.createContext<AuthContextType>({
-  isLoggedIn: false,
-  setIsLoggedIn: () => {},
-  username: '',
-  setUsername: () => {},
+  user: {
+    isLoggedIn: false,
+    username: '',
+  },
+  setUser: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);

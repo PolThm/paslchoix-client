@@ -23,7 +23,7 @@ const loginFormSchema = z.object({
 });
 
 const LoginPage: FC = () => {
-  const { setIsLoggedIn, setUsername } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const [loginUsername, setLoginUsername] = useState('');
@@ -35,11 +35,10 @@ const LoginPage: FC = () => {
 
   useEffect(() => {
     if (userData?.isLoggedIn) {
-      setUsername(userData.username);
-      setIsLoggedIn(true);
+      setUser({ isLoggedIn: true, username: userData.username });
       navigate(Paths.Home);
     }
-  }, [navigate, setIsLoggedIn, setUsername, userData]);
+  }, [navigate, setUser, userData]);
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();

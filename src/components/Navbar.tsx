@@ -38,8 +38,8 @@ const APP_NAME = "Pas l'choix";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setUsername } = useAuth();
-  const navMenuItems = isLoggedIn ? loggedInMenuItems : loggedOutMenuItems;
+  const { user, setUser } = useAuth();
+  const navMenuItems = user.isLoggedIn ? loggedInMenuItems : loggedOutMenuItems;
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -56,8 +56,7 @@ const Navbar = () => {
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const logout = () => {
-    setUsername('');
-    setIsLoggedIn(false);
+    setUser({ isLoggedIn: false, username: '' });
     localStorage.removeItem('token');
     navigate(Paths.Home);
   };
@@ -174,7 +173,7 @@ const Navbar = () => {
                   </MenuItem>
                 </Link>
               ))}
-              {isLoggedIn && (
+              {user.isLoggedIn && (
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography onClick={logout} color="error">
                     Déconnexion
@@ -184,7 +183,7 @@ const Navbar = () => {
             </Menu>
           </Box>
 
-          {isLoggedIn && (
+          {user.isLoggedIn && (
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 2 }}>
                 <Avatar
