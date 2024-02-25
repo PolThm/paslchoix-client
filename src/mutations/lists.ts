@@ -4,18 +4,17 @@ import axios from 'axios';
 import { List, NewList } from '@/types/interfaces';
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const headers = { 'x-access-token': localStorage.getItem('token') || '' };
 
 const createNewList = async (newList: NewList) => {
   const response = await axios.post(`${apiUrl}/api/new-list`, newList, {
-    headers,
+    headers: { 'x-access-token': localStorage.getItem('token') },
   });
   return response.data;
 };
 
 const deleteList = async (listId: string) => {
   const response = await axios.delete(`${apiUrl}/api/delete-list/${listId}`, {
-    headers,
+    headers: { 'x-access-token': localStorage.getItem('token') },
   });
   return response.data;
 };
