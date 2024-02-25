@@ -1,7 +1,6 @@
 import { FC, isValidElement, PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuth } from '@/contexts/AuthContext';
 import { Paths, RouteConditions } from '@/types/enums';
 
 const { loggedOut, loggedIn } = RouteConditions;
@@ -11,12 +10,12 @@ interface Props extends PropsWithChildren {
 }
 
 const ConditionalRoute: FC<Props> = ({ children, condition }) => {
-  const { user } = useAuth();
+  const isLoggedIn = !!localStorage.getItem('token');
 
   if (
     !isValidElement(children) ||
-    (condition === loggedOut && user.isLoggedIn) ||
-    (condition === loggedIn && !user.isLoggedIn)
+    (condition === loggedOut && isLoggedIn) ||
+    (condition === loggedIn && !isLoggedIn)
   ) {
     return <Navigate to={Paths.Home} />;
   }
