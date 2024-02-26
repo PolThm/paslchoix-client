@@ -1,36 +1,28 @@
 import { Box, Snackbar, Typography } from '@mui/material';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import RouterContent from '@/components/RouterContent';
-import { AuthContext } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useFetchUser } from '@/queries/user';
-import { UserAuth } from '@/types/interfaces';
 // import ReloadPrompt from '@/components/ReloadPrompt';
 
 const App: FC = () => {
-  const [user, setUser] = useState<UserAuth>({
-    isLoggedIn: false,
-    username: '',
-  });
-  const [isWelcomeSnackbarOpen, setIsWelcomeSnackbarOpen] = useState(false);
-  const authValue = useMemo(() => ({ user, setUser }), [user]);
-
-  useEffect(() => {
-    if (user.username) setIsWelcomeSnackbarOpen(true);
-  }, [user]);
-
+  const { setUser } = useAuth();
   const { data: userData } = useFetchUser(localStorage.getItem('token') || '');
+
+  const [isWelcomeSnackbarOpen, setIsWelcomeSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (userData?.isLoggedIn) {
-      setUser({ isLoggedIn: true, username: userData.username });
+      setUser(userData);
+      setIsWelcomeSnackbarOpen(true);
     }
-  }, [userData]);
+  }, [setUser, userData]);
 
   return (
-    <AuthContext.Provider value={authValue}>
+    <>
       <Box
         display="flex"
         flexDirection="column"
@@ -55,12 +47,12 @@ const App: FC = () => {
               component="span"
               sx={{ fontWeight: 'bold', display: 'inline' }}
             >
-              {` ${user.username}`}
+              {` ${userData?.username}`}
             </Typography>
           </Typography>
         }
       />
-    </AuthContext.Provider>
+    </>
   );
 };
 
