@@ -6,7 +6,6 @@ import Navbar from '@/components/Navbar';
 import RouterContent from '@/components/RouterContent';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFetchUser } from '@/queries/user';
-// import ReloadPrompt from '@/components/ReloadPrompt';
 
 const App: FC = () => {
   const { setUser } = useAuth();
