@@ -26,7 +26,7 @@ export interface List {
 }
 
 export interface UserAuth {
-  isLoggedIn: boolean;
+  isLoggedIn: boolean | null;
   username: string;
 }
 

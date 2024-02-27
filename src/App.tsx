@@ -17,6 +17,8 @@ const App: FC = () => {
     if (userData?.isLoggedIn) {
       setUser(userData);
       setIsWelcomeSnackbarOpen(true);
+    } else {
+      setUser({ isLoggedIn: false, username: '' });
     }
   }, [setUser, userData]);
 

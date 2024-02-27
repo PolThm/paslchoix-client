@@ -15,7 +15,7 @@ type AuthContextType = {
 };
 
 const initialUser: UserAuth = {
-  isLoggedIn: false,
+  isLoggedIn: null,
   username: '',
 };
 
