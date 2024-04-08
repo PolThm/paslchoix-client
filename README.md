@@ -1,6 +1,6 @@
 # Pas l'choix
 
-## An engaging and interactive random draw app
+## An engaging and interactive "Secret Santa" app, and more.
 
 Demo: https://paslchoix.netlify.app/
 
@@ -17,6 +17,7 @@ Link to server repo: https://github.com/PolThm/paslchoix-server
 - PWA
 - Vite
 - AWS (EC2)
+- Netlify
 - And more...
 
 Made with ❤️ by Pol Thomas
