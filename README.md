@@ -16,6 +16,7 @@ Link to server repo: https://github.com/PolThm/paslchoix-server
 - Material UI
 - PWA
 - Vite
+- AWS (EC2)
 - And more...
 
 Made with ❤️ by Pol Thomas
