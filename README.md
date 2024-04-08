@@ -2,6 +2,8 @@
 
 ## An engaging and interactive random draw app
 
+Demo: https://paslchoix.netlify.app/
+
 ### Stack :
 - Typescript
 - MongoDB
