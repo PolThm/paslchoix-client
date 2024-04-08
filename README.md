@@ -4,6 +4,8 @@
 
 Demo: https://paslchoix.netlify.app/
 
+Link to server repo: https://github.com/PolThm/paslchoix-server
+
 ### Stack :
 - Typescript
 - MongoDB
